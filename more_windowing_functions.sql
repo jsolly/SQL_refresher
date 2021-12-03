@@ -90,28 +90,3 @@ FROM
         FROM
             employee
     ) AS x
-    /* 
-     This can actually be simplified to put the case statements right into the windowing function
-     */
-SELECT
-    salary,
-    CASE
-        WHEN salary < lag(salary) over (
-            PARTITION by DEPT_NAME
-            ORDER BY
-                emp_ID
-        ) THEN 'Lower'
-        WHEN salary > lag(salary) over (
-            PARTITION by DEPT_NAME
-            ORDER BY
-                emp_ID
-        ) THEN 'Higher'
-        WHEN salary = lag(salary) over (
-            PARTITION by DEPT_NAME
-            ORDER BY
-                emp_ID
-        ) THEN 'Same'
-        ELSE 'Unknown'
-    END AS STATUS
-FROM
-    employee
